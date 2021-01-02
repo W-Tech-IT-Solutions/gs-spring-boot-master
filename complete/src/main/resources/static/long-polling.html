@@ -1,0 +1,56 @@
+<!--
+##################################################################################
+#                                                                                #
+# Codigo fonte para executar o teste com long polling ou sondagem longa.         #
+#                                                                                #
+# Projeto de Graduacao - Engenharia de Software - Poli/UFRJ                      #
+#                                                                                #
+# Autor: Wallace de Souza Espindola                                              #
+#                                                                                #
+##################################################################################
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Teste Long Polling</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+	<h2>Teste Long Polling - Sondagem Longa</h2>
+	<p>Clique para iniciar o polling de 30 segundos:</p>
+	<button onclick="myPollFunction()">Iniciar</button>
+	<script>
+		function myPollFunction() {
+			setInterval(function() {
+				document.getElementById('parte1').innerHTML = (new Date())
+						.toUTCString();
+				document.getElementById('parte2').innerHTML = Math.random();
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						$("#polling").append(
+								"<tr><td>" + this.responseText + "</td></tr>");
+					}
+				};
+				xhttp.open("GET", "http://localhost:8090/longpolling", true);
+				xhttp.send();
+
+			}, 30000); // 30 segundos
+		}
+	</script>
+	<p id="parte1"></p>
+	<p id="parte2"></p>
+	<div>
+		<table id="conversation">
+			<thead>
+				<tr>
+					<th>Pollings:</th>
+				</tr>
+			</thead>
+			<tbody id="polling">
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
